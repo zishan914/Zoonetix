@@ -1,0 +1,13 @@
+fastapi
+uvicorn[standard]
+pillow
+numpy
+jinja2
+tensorflow>=2.13.0
+sqlalchemy
+bcrypt==3.2.0
+python-jose[cryptography]
+passlib[bcrypt]
+python-multipart
+python-dotenv
+email-validator

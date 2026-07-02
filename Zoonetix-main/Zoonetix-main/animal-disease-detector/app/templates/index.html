@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ZOONETIX - Animal Disease Detection</title>
+    <link rel="stylesheet" href="/static/css/styles.css?v=3" />
+    <link rel="stylesheet" href="/static/css/auth.css?v=1" />
+    <style>
+        .site-footer {
+            border-top: 1px solid #263041;
+            background: #0d1119;
+            padding: 40px 20px 24px;
+            margin-top: 40px;
+        }
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #14b8a6;
+            margin-bottom: 8px;
+        }
+        .footer-tagline {
+            color: #6b7686;
+            font-size: 0.85rem;
+            max-width: 280px;
+        }
+        .footer-col h4 {
+            color: #e5e9f0;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 12px;
+        }
+        .footer-col a {
+            display: block;
+            color: #9aa5b1;
+            text-decoration: none;
+            font-size: 0.88rem;
+            margin-bottom: 8px;
+        }
+        .footer-col a:hover { color: #14b8a6; }
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 32px auto 0;
+            padding-top: 20px;
+            border-top: 1px solid #1c2330;
+            text-align: center;
+            color: #5b6472;
+            font-size: 0.8rem;
+        }
+    </style>
+  </head>
+  <body>
+    <script>
+if (localStorage.getItem('zoonetixTheme') === 'light') {
+          document.body.classList.add('theme-light');
+      }
+    </script>
+    <div class="particle-field" aria-hidden="true"></div>
+    
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="navbar-content">
+        <div class="navbar-logo">
+          <span class="logo-icon">🐾</span>
+          <span class="logo-text">ZOONETIX</span>
+        </div>
+        <div class="navbar-links">
+          <a href="/" class="nav-link active">Home</a>
+          <a href="/dashboard" class="nav-link">Dashboard</a>
+          <a href="/services" class="nav-link">Services</a>
+          <a href="/creators" class="nav-link">Creators</a>
+          <a href="/pricing" class="nav-link">Pricing</a>
+          {% if current_user and current_user != "Guest" %}
+          <a href="/admin" class="nav-link">Admin Panel</a>
+          {% endif %}
+        </div>
+        <div class="navbar-user">
+          <button class="btn btn-secondary theme-toggle-btn" id="themeToggleBtn" type="button" aria-label="Toggle theme">☀️ Light</button>
+          <span class="user-welcome" id="userWelcome">Welcome, {{ current_user }}!</span>
+          <button class="btn btn-secondary" id="logoutBtn">Logout</button>
+        </div>
+      </div>
+    </nav>
+    
+    <div class="page-shell">
+      <header class="hero">
+        <div class="hero-copy">
+          <span class="eyebrow">Animal Disease Detection</span>
+          <h1>Upload a photo. Get back a disease prediction powered by AI.</h1>
+          <p>
+            Modern frontend experience with live preview, file upload, and responsive results.
+            Use PNG or JPEG images of livestock to evaluate whether an issue is present.
+          </p>
+          <div class="hero-carousel">
+            <div class="hero-card hero-card--active hero-card--one" data-index="0">
+              <span class="hero-chip">Realtime AI predictions</span>
+              <strong class="hero-card-title">Smart animal diagnostics</strong>
+              <p class="hero-card-copy">Fast, accurate animal disease detection for livestock photos.</p>
+            </div>
+            <div class="hero-card hero-card--two" data-index="1">
+              <span class="hero-chip">Instant image upload</span>
+              <strong class="hero-card-title">Photo-based disease alerts</strong>
+              <p class="hero-card-copy">Upload JPG/PNG and get farm health feedback in seconds.</p>
+            </div>
+            <div class="hero-card hero-card--three" data-index="2">
+              <span class="hero-chip">Built for livestock</span>
+              <strong class="hero-card-title">Detect mastitis, pneumonia, and more</strong>
+              <p class="hero-card-copy">The model recognizes common animal illnesses from pictures.</p>
+            </div>
+          </div>
+          <div class="hero-dots" id="heroDots">
+            <button class="hero-dot hero-dot--active" type="button" data-index="0" aria-label="Show card 1"></button>
+            <button class="hero-dot" type="button" data-index="1" aria-label="Show card 2"></button>
+            <button class="hero-dot" type="button" data-index="2" aria-label="Show card 3"></button>
+          </div>
+        </div>
+      </header>
+
+      <main class="content-grid">
+        <section class="panel upload-panel">
+          <div class="panel-header">
+            <h2>Upload your image</h2>
+            <p>Accepted formats: JPG, JPEG, PNG</p>
+          </div>
+
+          <form id="uploadForm" class="upload-form">
+            <label class="file-input-label" for="fileInput">
+              <input id="fileInput" type="file" accept="image/jpeg,image/png" />
+              <span>Select image</span>
+            </label>
+
+            <div class="preview-shell" id="previewShell">
+              <img id="previewImage" alt="Selected image preview" />
+              <span id="previewText">Image ready to upload</span>
+            </div>
+
+            <button class="btn btn-primary" type="submit" id="submitButton" disabled>
+              Predict disease
+            </button>
+          </form>
+
+          <div class="notes-card">
+            <h3>How it works</h3>
+            <ul>
+              <li>File uploads are sent to the `/predict` API endpoint.</li>
+              <li>A CNN-based inference pipeline processes the image.</li>
+              <li>For a trained model, place `model/my_mobilenet_model.keras` in the project root.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="panel result-panel">
+          <div class="panel-header">
+            <h2>Prediction</h2>
+            <p class="status-text" id="statusText">Choose an image to start.</p>
+          </div>
+
+          <div class="result-card" id="resultCard">
+            <div class="result-item">
+              <span>Detected disease</span>
+              <strong id="resultDisease">—</strong>
+            </div>
+            <div class="result-item">
+              <span>Confidence</span>
+              <strong id="resultConfidence">—</strong>
+            </div>
+            <div class="result-item result-message">
+              <span>Message</span>
+              <p id="resultMessage">Upload an image and click Predict to see the model output.</p>
+            </div>
+          </div>
+
+          <!-- Treatment & Medication Card -->
+          <div class="treatment-card" id="treatmentCard" style="display:none;">
+            <div class="treatment-header">
+              <span class="treatment-icon">💊</span>
+              <h3>Treatment & Medication Guide</h3>
+            </div>
+            <div class="treatment-content" id="treatmentContent">
+              <!-- Populated by JS -->
+            </div>
+            <div class="treatment-disclaimer" id="treatmentDisclaimer"></div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div>
+                <div class="footer-brand">🐾 ZOONETIX</div>
+                <div class="footer-tagline">AI-powered animal disease detection, built to help livestock owners catch problems early.</div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Navigate</h4>
+                <a href="/">Home</a>
+                <a href="/dashboard">Dashboard</a>
+                <a href="/services">Services</a>
+                <a href="/pricing">Pricing</a>
+            </div>
+
+            <div class="footer-col">
+                <h4>About</h4>
+                <a href="/creators">Our Team</a>
+                <a href="mailto:contact@zoonetix.com">Contact Us</a>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            &copy; 2026 ZOONETIX. All rights reserved.
+        </div>
+    </footer>
+
+    <script src="/static/js/app.js?v=3" defer></script>
+    <script src="/static/js/theme.js?v=3" defer></script>
+  </body>
+</html>

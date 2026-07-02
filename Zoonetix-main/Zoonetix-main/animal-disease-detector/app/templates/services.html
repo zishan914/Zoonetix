@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Services - ZOONETIX</title>
+    <link rel="stylesheet" href="/static/css/styles.css?v=3" />
+    <link rel="stylesheet" href="/static/css/auth.css?v=1" />
+    <style>
+        .site-footer {
+            border-top: 1px solid #263041;
+            background: #0d1119;
+            padding: 40px 20px 24px;
+            margin-top: 40px;
+        }
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #14b8a6;
+            margin-bottom: 8px;
+        }
+        .footer-tagline {
+            color: #6b7686;
+            font-size: 0.85rem;
+            max-width: 280px;
+        }
+        .footer-col h4 {
+            color: #e5e9f0;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 12px;
+        }
+        .footer-col a {
+            display: block;
+            color: #9aa5b1;
+            text-decoration: none;
+            font-size: 0.88rem;
+            margin-bottom: 8px;
+        }
+        .footer-col a:hover { color: #14b8a6; }
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 32px auto 0;
+            padding-top: 20px;
+            border-top: 1px solid #1c2330;
+            text-align: center;
+            color: #5b6472;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        if (localStorage.getItem('zoonetixTheme') === 'light') {
+            document.body.classList.add('theme-light');
+        }
+    </script>
+    <div class="particle-field" aria-hidden="true"></div>
+    
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="navbar-logo">
+                <span class="logo-icon">🐾</span>
+                <span class="logo-text">ZOONETIX</span>
+            </div>
+            <div class="navbar-links">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/dashboard" class="nav-link">Dashboard</a>
+                <a href="/services" class="nav-link active">Services</a>
+                <a href="/pricing" class="nav-link">Pricing</a>
+                <a href="/creators" class="nav-link">Creators</a>
+                {% if current_user and current_user != "Guest" %}
+                <a href="/admin" class="nav-link">Admin Panel</a>
+                {% endif %}
+            </div>
+            <div class="navbar-user">
+                <button class="btn btn-secondary theme-toggle-btn" id="themeToggleBtn" type="button" aria-label="Toggle theme">☀️ Light</button>
+                <span class="user-welcome" id="userWelcome">Welcome, {{ current_user }}!</span>
+                <button class="btn btn-secondary" id="logoutBtn">Logout</button>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="page-shell">
+        <header class="hero services-hero">
+            <div class="hero-copy">
+                <span class="eyebrow">Our Services</span>
+                <h1>Powerful AI Tools for Livestock Health</h1>
+                <p>
+                    ZOONETIX provides cutting-edge artificial intelligence solutions to help farmers, 
+                    veterinarians, and livestock managers detect diseases early and keep their animals healthy.
+                </p>
+            </div>
+        </header>
+
+        <main class="services-grid">
+            <!-- Service Card 1 -->
+            <section class="service-card">
+                <div class="service-icon">🔬</div>
+                <h3>AI Disease Detection</h3>
+                <p>Upload photos of your livestock and get instant AI-powered disease predictions. Our model detects mastitis, pneumonia, foot-and-mouth disease, skin infections, and more.</p>
+                <ul class="service-features">
+                    <li>Instant results</li>
+                    <li>95%+ accuracy</li>
+                    <li>Multiple disease detection</li>
+                </ul>
+            </section>
+
+            <!-- Service Card 2 -->
+            <section class="service-card">
+                <div class="service-icon">💊</div>
+                <h3>Treatment Guides</h3>
+                <p>Get comprehensive treatment and medication recommendations for detected diseases. Includes dosage information, medications, and care instructions.</p>
+                <ul class="service-features">
+                    <li>Detailed treatment plans</li>
+                    <li>Medication dosages</li>
+                    <li>Care instructions</li>
+                </ul>
+            </section>
+
+            <!-- Service Card 3 -->
+            <section class="service-card">
+                <div class="service-icon">📊</div>
+                <h3>Health Dashboard</h3>
+                <p>Track your livestock health over time with our comprehensive dashboard. View prediction history, track disease trends, and manage your herd health.</p>
+                <ul class="service-features">
+                    <li>Prediction history</li>
+                    <li>Disease trends</li>
+                    <li>Export reports</li>
+                </ul>
+            </section>
+
+            <!-- Service Card 4 -->
+            <section class="service-card">
+                <div class="service-icon">🔔</div>
+                <h3>Health Alerts</h3>
+                <p>Receive instant notifications when disease is detected. Get early warnings to take action and prevent the spread of illness in your herd.</p>
+                <ul class="service-features">
+                    <li>Real-time alerts</li>
+                    <li>Early warning system</li>
+                    <li>Priority notifications</li>
+                </ul>
+            </section>
+
+            <!-- Service Card 5 -->
+            <section class="service-card">
+                <div class="service-icon">📱</div>
+                <h3>Mobile Access</h3>
+                <p>Access ZOONETIX from anywhere using our responsive web application. Works on desktop, tablet, and mobile devices.</p>
+                <ul class="service-features">
+                    <li>Responsive design</li>
+                    <li>Cross-platform</li>
+                    <li>Offline support</li>
+                </ul>
+            </section>
+
+            <!-- Service Card 6 -->
+            <section class="service-card">
+                <div class="service-icon">🛡️</div>
+                <h3>Veterinary Support</h3>
+                <p>Connect with veterinary experts for additional guidance. Get professional consultations for critical cases.</p>
+                <ul class="service-features">
+                    <li>Expert consultations</li>
+                    <li>24/7 support</li>
+                    <li>Emergency help</li>
+                </ul>
+            </section>
+        </main>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <h2>Ready to get started?</h2>
+            <p>Start protecting your livestock today with our AI-powered disease detection.</p>
+            <a href="/" class="btn btn-primary">Try It Now</a>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div>
+                <div class="footer-brand">🐾 ZOONETIX</div>
+                <div class="footer-tagline">AI-powered animal disease detection, built to help livestock owners catch problems early.</div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Navigate</h4>
+                <a href="/">Home</a>
+                <a href="/dashboard">Dashboard</a>
+                <a href="/services">Services</a>
+                <a href="/pricing">Pricing</a>
+            </div>
+
+            <div class="footer-col">
+                <h4>About</h4>
+                <a href="/creators">Our Team</a>
+                <a href="mailto:contact@zoonetix.com">Contact Us</a>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            &copy; 2026 ZOONETIX. All rights reserved.
+        </div>
+    </footer>
+
+    <script src="/static/js/theme.js?v=3" defer></script>
+    <script>
+        // Add click handlers for logout
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            await fetch('/api/logout', { method: 'POST' });
+            window.location.href = '/';
+        });
+    </script>
+</body>
+</html>

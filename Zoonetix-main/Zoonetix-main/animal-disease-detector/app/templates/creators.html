@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZOONETIX - Our Team</title>
+<link rel="stylesheet" href="/static/css/styles.css">
+<style>
+  * { box-sizing: border-box; }
+
+  body {
+    background: #0b0f16;
+  }
+
+  /* Temporary navbar — replace with your real site navbar whenever
+     you send it over, so it matches the rest of the pages exactly. */
+  .site-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    background: #11151d;
+    border-bottom: 1px solid #263041;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .site-nav .brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #14b8a6;
+  }
+  .site-nav .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .site-nav .nav-links a {
+    color: #e5e9f0;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  .site-nav .nav-links a:hover { color: #14b8a6; }
+  .site-nav .nav-links a.active { color: #14b8a6; font-weight: 700; }
+  .site-nav .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: #e5e9f0;
+    font-size: 0.9rem;
+  }
+  .site-nav .logout-btn {
+    background: rgba(239,68,68,0.15);
+    color: #ef4444;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .site-nav .logout-btn:hover { opacity: 0.85; }
+
+  /* Hero */
+  .team-hero {
+    text-align: center;
+    padding: 60px 20px 20px;
+  }
+  .team-hero .eyebrow {
+    color: #14b8a6;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .team-hero h1 {
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: #f4f6f9;
+    margin: 0 0 10px;
+  }
+  .team-hero p {
+    color: #9aa5b1;
+    font-size: 1rem;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  /* Grid */
+  .team-wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+  }
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 22px;
+  }
+
+  .team-card {
+    position: relative;
+    background: linear-gradient(180deg, #171c26 0%, #12161f 100%);
+    border: 1px solid #263041;
+    border-radius: 16px;
+    padding: 28px 22px;
+    text-align: center;
+    overflow: hidden;
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  }
+  .team-card::before {
+    content: "";
+    position: absolute;
+    top: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 180px;
+    height: 180px;
+    background: radial-gradient(circle, rgba(20,184,166,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .team-card:hover {
+    transform: translateY(-6px);
+    border-color: #14b8a6;
+    box-shadow: 0 12px 30px rgba(20,184,166,0.12);
+  }
+
+  .team-avatar {
+    position: relative;
+    width: 78px;
+    height: 78px;
+    border-radius: 50%;
+    margin: 0 auto 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #0b0f16;
+    background: linear-gradient(135deg, #2dd4bf, #0d9488);
+    box-shadow: 0 0 0 4px rgba(20,184,166,0.12);
+  }
+
+  .team-name {
+    font-size: 1.08rem;
+    font-weight: 700;
+    color: #f4f6f9;
+    margin-bottom: 10px;
+  }
+
+  .role-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+  }
+  .role-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    background: rgba(20,184,166,0.12);
+    color: #2dd4bf;
+    border: 1px solid rgba(20,184,166,0.25);
+  }
+
+  /* Slightly distinct accent color per "track" so roles are easy to scan */
+  .role-badge.role-lead    { background: rgba(168,85,247,0.12); color: #c084fc; border-color: rgba(168,85,247,0.25); }
+  .role-badge.role-backend { background: rgba(20,184,166,0.12); color: #2dd4bf; border-color: rgba(20,184,166,0.25); }
+  .role-badge.role-frontend{ background: rgba(59,130,246,0.12); color: #60a5fa; border-color: rgba(59,130,246,0.25); }
+  .role-badge.role-ai      { background: rgba(244,114,182,0.12); color: #f472b6; border-color: rgba(244,114,182,0.25); }
+  .role-badge.role-finance { background: rgba(250,204,21,0.12); color: #facc15; border-color: rgba(250,204,21,0.25); }
+  .role-badge.role-marketing{ background: rgba(251,146,60,0.12); color: #fb923c; border-color: rgba(251,146,60,0.25); }
+
+  @media (max-width: 500px) {
+    .team-hero h1 { font-size: 1.9rem; }
+    .team-card { padding: 22px 16px; }
+  }
+
+  /* Footer */
+  .site-footer {
+    border-top: 1px solid #263041;
+    background: #0d1119;
+    padding: 40px 20px 24px;
+    margin-top: 20px;
+  }
+  .footer-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+  .footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #14b8a6;
+    margin-bottom: 8px;
+  }
+  .footer-tagline {
+    color: #6b7686;
+    font-size: 0.85rem;
+    max-width: 280px;
+  }
+  .footer-col h4 {
+    color: #e5e9f0;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 12px;
+  }
+  .footer-col a {
+    display: block;
+    color: #9aa5b1;
+    text-decoration: none;
+    font-size: 0.88rem;
+    margin-bottom: 8px;
+  }
+  .footer-col a:hover { color: #14b8a6; }
+  .footer-bottom {
+    max-width: 1100px;
+    margin: 32px auto 0;
+    padding-top: 20px;
+    border-top: 1px solid #1c2330;
+    text-align: center;
+    color: #5b6472;
+    font-size: 0.8rem;
+  }
+</style>
+</head>
+<body>
+
+  <!-- ============================================================
+       TEMPORARY navbar — replace this whole <nav> block with your
+       real site navbar (copied from index.html) whenever you send
+       it over, so it matches the rest of the pages exactly.
+  ============================================================= -->
+  <nav class="site-nav">
+    <div class="brand">🐾 ZOONETIX</div>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/dashboard">Dashboard</a>
+      <a href="/services">Services</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/creators" class="active">Creators</a>
+      {% if current_user and current_user != "Guest" %}
+      <a href="/admin">Admin Panel</a>
+      {% endif %}
+    </div>
+    <div class="nav-right">
+      <span>{{ current_user }}</span>
+      {% if current_user and current_user != "Guest" %}
+      <button class="logout-btn" onclick="logout()">Logout</button>
+      {% endif %}
+    </div>
+  </nav>
+
+  <div class="team-hero">
+    <div class="eyebrow">The People Behind It</div>
+    <h1>🐾 Meet the Creators</h1>
+    <p>The team that designed, built, and trained ZOONETIX from the ground up.</p>
+  </div>
+
+  <div class="team-wrap">
+    <div class="team-grid">
+
+      <div class="team-card">
+        <div class="team-avatar">ZH</div>
+        <div class="team-name">Zeeshan Haider</div>
+        <div class="role-badges">
+          <span class="role-badge role-lead">Project Leader</span>
+        </div>
+      </div>
+
+      <div class="team-card">
+        <div class="team-avatar">AR</div>
+        <div class="team-name">Ali Raza</div>
+        <div class="role-badges">
+          <span class="role-badge role-backend">Backend Developer</span>
+          <span class="role-badge role-frontend">Frontend Developer</span>
+          <span class="role-badge role-ai">AI Integration &amp; Model Training</span>
+        </div>
+      </div>
+
+      <div class="team-card">
+        <div class="team-avatar">MH</div>
+        <div class="team-name">M. Hamid</div>
+        <div class="role-badges">
+          <span class="role-badge role-backend">Backend Developer</span>
+        </div>
+      </div>
+
+      <div class="team-card">
+        <div class="team-avatar">AA</div>
+        <div class="team-name">Arsalan Aftab</div>
+        <div class="role-badges">
+          <span class="role-badge role-backend">Backend Developer</span>
+        </div>
+      </div>
+
+      <div class="team-card">
+        <div class="team-avatar">MF</div>
+        <div class="team-name">M. Fasih ud Din</div>
+        <div class="role-badges">
+          <span class="role-badge role-finance">Finance Manager</span>
+          <span class="role-badge role-ai">Model Training</span>
+        </div>
+      </div>
+
+      <div class="team-card">
+        <div class="team-avatar">SC</div>
+        <div class="team-name">Sara Chaudhary</div>
+        <div class="role-badges">
+          <span class="role-badge role-marketing">Marketing Head</span>
+        </div>
+      </div>
+
+      <div class="team-card">
+        <div class="team-avatar">FA</div>
+        <div class="team-name">Faiza Anwar</div>
+        <div class="role-badges">
+          <span class="role-badge role-frontend">Frontend Developer</span>
+        </div>
+      </div>
+
+      <div class="team-card">
+        <div class="team-avatar">MZ</div>
+        <div class="team-name">Masooma Zahra</div>
+        <div class="role-badges">
+          <span class="role-badge role-frontend">Frontend Developer</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">🐾 ZOONETIX</div>
+        <div class="footer-tagline">AI-powered animal disease detection, built to help livestock owners catch problems early.</div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Navigate</h4>
+        <a href="/">Home</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/services">Services</a>
+        <a href="/pricing">Pricing</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>About</h4>
+        <a href="/creators">Our Team</a>
+        <a href="mailto:contact@zoonetix.com">Contact Us</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      &copy; 2026 ZOONETIX. All rights reserved.
+    </div>
+  </footer>
+
+  <script>
+    async function logout() {
+      try {
+        await fetch('/api/logout', { method: 'POST' });
+      } catch (err) {
+        console.error(err);
+      }
+      window.location.href = '/';
+    }
+  </script>
+
+</body>
+</html>

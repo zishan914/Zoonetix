@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard - ZOONETIX</title>
+    <link rel="stylesheet" href="/static/css/styles.css?v=3" />
+    <link rel="stylesheet" href="/static/css/auth.css?v=1" />
+    <style>
+        .site-footer {
+            border-top: 1px solid #263041;
+            background: #0d1119;
+            padding: 40px 20px 24px;
+            margin-top: 40px;
+        }
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #14b8a6;
+            margin-bottom: 8px;
+        }
+        .footer-tagline {
+            color: #6b7686;
+            font-size: 0.85rem;
+            max-width: 280px;
+        }
+        .footer-col h4 {
+            color: #e5e9f0;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 12px;
+        }
+        .footer-col a {
+            display: block;
+            color: #9aa5b1;
+            text-decoration: none;
+            font-size: 0.88rem;
+            margin-bottom: 8px;
+        }
+        .footer-col a:hover { color: #14b8a6; }
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 32px auto 0;
+            padding-top: 20px;
+            border-top: 1px solid #1c2330;
+            text-align: center;
+            color: #5b6472;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        if (localStorage.getItem('zoonetixTheme') === 'light') {
+            document.body.classList.add('theme-light');
+        }
+    </script>
+    <div class="particle-field" aria-hidden="true"></div>
+    
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="navbar-logo">
+                <span class="logo-icon">🐾</span>
+                <span class="logo-text">ZOONETIX</span>
+            </div>
+            <div class="navbar-links">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/dashboard" class="nav-link active">Dashboard</a>
+                <a href="/services" class="nav-link">Services</a>
+                <a href="/pricing" class="nav-link">Pricing</a>
+                <a href="/creators" class="nav-link">Creators</a>
+                {% if current_user and current_user != "Guest" %}
+                <a href="/admin" class="nav-link">Admin Panel</a>
+                {% endif %}
+            </div>
+            <div class="navbar-user">
+                <button class="btn btn-secondary theme-toggle-btn" id="themeToggleBtn" type="button" aria-label="Toggle theme">☀️ Light</button>
+                <span class="user-welcome" id="userWelcome">Welcome, {{ current_user }}!</span>
+                <button class="btn btn-secondary" id="logoutBtn">Logout</button>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="page-shell">
+        <header class="hero dashboard-hero">
+            <div class="hero-copy">
+                <span class="eyebrow">Dashboard</span>
+                <h1>Your Livestock Health Overview</h1>
+                <p>
+                    Track disease predictions, monitor health trends, and manage your herd health 
+                    all in one place.
+                </p>
+            </div>
+        </header>
+
+        <!-- Stats Cards -->
+        <main class="dashboard-stats">
+            <section class="stat-card">
+                <div class="stat-icon">🔬</div>
+                <div class="stat-info">
+                    <span class="stat-label">Total Predictions</span>
+                    <strong class="stat-value" id="totalPredictions">0</strong>
+                </div>
+            </section>
+
+            <section class="stat-card">
+                <div class="stat-icon">✅</div>
+                <div class="stat-info">
+                    <span class="stat-label">Healthy Results</span>
+                    <strong class="stat-value" id="healthyCount">0</strong>
+                </div>
+            </section>
+
+            <section class="stat-card warning">
+                <div class="stat-icon">⚠️</div>
+                <div class="stat-info">
+                    <span class="stat-label">Disease Detected</span>
+                    <strong class="stat-value" id="diseaseCount">0</strong>
+                </div>
+            </section>
+
+            <section class="stat-card">
+                <div class="stat-icon">📅</div>
+                <div class="stat-info">
+                    <span class="stat-label">Last Prediction</span>
+                    <strong class="stat-value" id="lastPrediction">—</strong>
+                </div>
+            </section>
+        </main>
+
+        <!-- Recent Predictions Table -->
+        <section class="dashboard-table-section">
+            <div class="table-header">
+                <h2>Recent Predictions</h2>
+                <button class="btn btn-secondary" id="refreshBtn">Refresh</button>
+            </div>
+            
+            <div class="table-container">
+                <table class="dashboard-table" id="predictionsTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Image</th>
+                            <th>Disease</th>
+                            <th>Confidence</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="predictionsBody">
+                        <tr class="empty-row">
+                            <td colspan="5" class="empty-message">
+                                <span class="empty-icon">📷</span>
+                                <p>No predictions yet</p>
+                                <p class="empty-subtitle">Go to Home to make your first prediction</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Quick Actions -->
+        <section class="quick-actions">
+            <h2>Quick Actions</h2>
+            <div class="actions-grid">
+                <a href="/" class="action-card">
+                    <span class="action-icon">🔬</span>
+                    <span class="action-label">New Prediction</span>
+                </a>
+                <a href="/services" class="action-card">
+                    <span class="action-icon">💊</span>
+                    <span class="action-label">View Services</span>
+                </a>
+                <a href="/pricing" class="action-card">
+                    <span class="action-icon">💰</span>
+                    <span class="action-label">Pricing Plans</span>
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div>
+                <div class="footer-brand">🐾 ZOONETIX</div>
+                <div class="footer-tagline">AI-powered animal disease detection, built to help livestock owners catch problems early.</div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Navigate</h4>
+                <a href="/">Home</a>
+                <a href="/dashboard">Dashboard</a>
+                <a href="/services">Services</a>
+                <a href="/pricing">Pricing</a>
+            </div>
+
+            <div class="footer-col">
+                <h4>About</h4>
+                <a href="/creators">Our Team</a>
+                <a href="mailto:contact@zoonetix.com">Contact Us</a>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            &copy; 2026 ZOONETIX. All rights reserved.
+        </div>
+    </footer>
+
+    <script src="/static/js/theme.js?v=3" defer></script>
+<script>
+        async function fetchPredictions() {
+            try {
+                const response = await fetch('/api/predictions');
+                if (response.ok) {
+                    return await response.json();
+                }
+                return [];
+            } catch (error) {
+                console.error('Error fetching predictions:', error);
+                return [];
+            }
+        }
+
+        async function fetchStats() {
+            try {
+                const response = await fetch('/api/stats');
+                if (response.ok) {
+                    return await response.json();
+                }
+                return { total: 0, healthy: 0, disease: 0, last_prediction: null };
+            } catch (error) {
+                console.error('Error fetching stats:', error);
+                return { total: 0, healthy: 0, disease: 0, last_prediction: null };
+            }
+        }
+
+        async function updateDashboard() {
+            const [predictions, stats] = await Promise.all([fetchPredictions(), fetchStats()]);
+            
+            // Update stats
+            document.getElementById('totalPredictions').textContent = stats.total || 0;
+            document.getElementById('healthyCount').textContent = stats.healthy || 0;
+            document.getElementById('diseaseCount').textContent = stats.disease || 0;
+            
+            if (stats.last_prediction) {
+                const date = new Date(stats.last_prediction);
+                document.getElementById('lastPrediction').textContent = date.toLocaleDateString();
+            } else {
+                document.getElementById('lastPrediction').textContent = '—';
+            }
+
+            // Update table
+            const tbody = document.getElementById('predictionsBody');
+            if (predictions.length === 0) {
+                tbody.innerHTML = `
+                    <tr class="empty-row">
+                        <td colspan="5" class="empty-message">
+                            <span class="empty-icon">📷</span>
+                            <p>No predictions yet</p>
+                            <p class="empty-subtitle">Go to Home to make your first prediction</p>
+                        </td>
+                    </tr>
+                `;
+            } else {
+tbody.innerHTML = predictions.map(p => {
+                    const date = p.created_at ? new Date(p.created_at).toLocaleDateString() : 'N/A';
+                    const isHealthy = p.disease.toLowerCase() === 'healthy';
+                    return `
+                        <tr>
+                            <td>${date}</td>
+                            <td>${p.image_name || 'Unknown'}</td>
+                            <td class="${isHealthy ? 'status-healthy' : 'status-disease'}">${p.disease}</td>
+                            <td>${p.confidence.toFixed(1)}%</td>
+<td>
+                                <button class="btn btn-small" onclick="viewDetails(${p.id})">View</button>
+                                <button class="btn btn-small btn-danger" onclick="deletePrediction(${p.id})">Delete</button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+        }
+
+function viewDetails(id) {
+            console.log('View details for prediction:', id);
+        }
+
+        async function deletePrediction(id) {
+            if (!confirm('Are you sure you want to delete this prediction?')) {
+                return;
+            }
+            try {
+                const response = await fetch(`/api/predictions/${id}`, {
+                    method: 'DELETE'
+                });
+                if (response.ok) {
+                    alert('Prediction deleted successfully');
+                    updateDashboard();
+                } else {
+                    alert('Failed to delete prediction');
+                }
+            } catch (error) {
+                console.error('Error deleting prediction:', error);
+                alert('Error deleting prediction');
+            }
+        }
+
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            await fetch('/api/logout', { method: 'POST' });
+            window.location.href = '/';
+        });
+
+        document.getElementById('refreshBtn').addEventListener('click', () => {
+            updateDashboard();
+        });
+
+        // Initialize dashboard
+        updateDashboard();
+    </script>
+</body>
+</html>

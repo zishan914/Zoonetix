@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pricing - ZOONETIX</title>
+    <link rel="stylesheet" href="/static/css/styles.css?v=3" />
+    <link rel="stylesheet" href="/static/css/auth.css?v=1" />
+    <style>
+        .site-footer {
+            border-top: 1px solid #263041;
+            background: #0d1119;
+            padding: 40px 20px 24px;
+            margin-top: 40px;
+        }
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #14b8a6;
+            margin-bottom: 8px;
+        }
+        .footer-tagline {
+            color: #6b7686;
+            font-size: 0.85rem;
+            max-width: 280px;
+        }
+        .footer-col h4 {
+            color: #e5e9f0;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 12px;
+        }
+        .footer-col a {
+            display: block;
+            color: #9aa5b1;
+            text-decoration: none;
+            font-size: 0.88rem;
+            margin-bottom: 8px;
+        }
+        .footer-col a:hover { color: #14b8a6; }
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 32px auto 0;
+            padding-top: 20px;
+            border-top: 1px solid #1c2330;
+            text-align: center;
+            color: #5b6472;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        if (localStorage.getItem('zoonetixTheme') === 'light') {
+            document.body.classList.add('theme-light');
+        }
+    </script>
+    <div class="particle-field" aria-hidden="true"></div>
+    
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="navbar-logo">
+                <span class="logo-icon">🐾</span>
+                <span class="logo-text">ZOONETIX</span>
+            </div>
+            <div class="navbar-links">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/dashboard" class="nav-link">Dashboard</a>
+                <a href="/services" class="nav-link">Services</a>
+                <a href="/pricing" class="nav-link active">Pricing</a>
+                <a href="/creators" class="nav-link">Creators</a>
+                {% if current_user and current_user != "Guest" %}
+                <a href="/admin" class="nav-link">Admin Panel</a>
+                {% endif %}
+            </div>
+            <div class="navbar-user">
+                <button class="btn btn-secondary theme-toggle-btn" id="themeToggleBtn" type="button" aria-label="Toggle theme">☀️ Light</button>
+                <span class="user-welcome" id="userWelcome">Welcome, {{ current_user }}!</span>
+                <button class="btn btn-secondary" id="logoutBtn">Logout</button>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="page-shell">
+        <header class="hero pricing-hero">
+            <div class="hero-copy">
+                <span class="eyebrow">Pricing Plans</span>
+                <h1>Simple, Transparent Pricing</h1>
+                <p>
+                    Choose the plan that best fits your needs. All plans include our core AI disease detection features.
+                    No hidden fees, no surprises.
+                </p>
+            </div>
+        </header>
+
+        <main class="pricing-grid">
+            <!-- Free Plan -->
+            <section class="pricing-card">
+                <div class="pricing-header">
+                    <h3>Starter</h3>
+                    <div class="price">
+                        <span class="currency">$</span>
+                        <span class="amount">0</span>
+                        <span class="period">/month</span>
+                    </div>
+                    <p class="price-description">Perfect for trying out the platform</p>
+                </div>
+                <ul class="pricing-features">
+                    <li>
+                        <span class="check">✓</span>
+                        10 disease predictions/month
+                    </li>
+                    <li>
+                        <span class="check">✓</span>
+                        Basic disease detection
+                    </li>
+                    <li>
+                        <span class="check">✓</span>
+                        Treatment guides
+                    </li>
+                    <li>
+                        <span class="check">✓</span>
+                        Email support
+                    </li>
+                    <li class="disabled">
+                        <span class="cross">✗</span>
+                        Health dashboard
+                    </li>
+                    <li class="disabled">
+                        <span class="cross">✗</span>
+                        Priority support
+                    </li>
+                    <li class="disabled">
+                        <span class="cross">✗</span>
+                        API access
+                    </li>
+                </ul>
+                <button class="btn btn-secondary btn-full">Get Started</button>
+            </section>
+
+            <!-- Pro Plan -->
+            <section class="pricing-card popular">
+                <div class="popular-badge">Most Popular</div>
+                <div class="pricing-header">
+                    <h3>Professional</h3>
+                    <div class="price">
+                        <span class="currency">$</span>
+                        <span class="amount">29</span>
+                        <span class="period">/month</span>
+                    </div>
+                    <p class="price-description">For small to medium farms</p>
+                </div>
+                <ul class="pricing-features">
+                    <li>
+                        <span class="check">✓</span>
+                        100 disease predictions/month
+                    </li>
+                    <li>
+                        <span class="check">✓</span>
+                        Advanced disease detection
+                    </li>
+                    <li>
+                        <span class="check">✓</span>
+                        Treatment guides
+                    </li>
+                    <li>
+                        <span class="check">✓</span>
+                        Health dashboard
+                    </li>
+                    <li>
+                        <span class="check">✓</span>
+                        Priority email support
+                    </li>
+                    <li class="disabled">
+                        <span class="cross">✗</span>
+                        API access
+                    </li>
+                    <li class="disabled">
+                        <span class="cross">✗</span>
+                        Custom integrations
+                    </li>
+                </ul>
+                <button class="btn btn-primary btn-full">Get Started</button>
+            </section>
+
+            <!-- Enterprise Plan -->
+            <section class="pricing-card">
+                <div class="pricing-header">
+                    <h3>Enterprise</h3>
+                    <div class="price">
+                        <span class="currency">$</span>
+                        <span class="amount">99</span>
+                        <span class="period">/month</span>
+                    </div>
+                    <p class="price-description">For large operations</p>
+                </div>
+                <ul class="pricing-features">
+                    <li>
+                        <span class="check">✓</span>
+                        Unlimited predictions
+                    </li>
+                    <li>
+                        <span class="check">✓</span>
+                        Advanced disease detection
+                    </li>
+                    <li>
+                        <span class="check">✓</span>
+                        Full treatment guides
+                    </li>
+                    <li>
+                        <span class="check">✓</span>
+                        Advanced health dashboard
+                    </li>
+                    <li>
+                        <span class="check">✓</span>
+                        24/7 priority support
+                    </li>
+                    <li>
+                        <span class="check">✓</span>
+                        API access
+                    </li>
+                    <li>
+                        <span class="check">✓</span>
+                        Custom integrations
+                    </li>
+                </ul>
+                <button class="btn btn-secondary btn-full">Contact Sales</button>
+            </section>
+        </main>
+
+        <!-- FAQ Section -->
+        <section class="faq-section">
+            <h2>Frequently Asked Questions</h2>
+            
+            <div class="faq-item">
+                <h4>Can I change plans anytime?</h4>
+                <p>Yes! You can upgrade or downgrade your plan at any time. Changes take effect immediately.</p>
+            </div>
+            
+            <div class="faq-item">
+                <h4>What payment methods do you accept?</h4>
+                <p>We accept all major credit cards (Visa, Mastercard, American Express) and PayPal.</p>
+            </div>
+            
+            <div class="faq-item">
+                <h4>Is there a free trial?</h4>
+                <p>Yes! Our Starter plan is free forever, so you can try the platform before committing to a paid plan.</p>
+            </div>
+            
+            <div class="faq-item">
+                <h4>Do you offer refunds?</h4>
+                <p>We offer a 30-day money-back guarantee for all paid plans. If you're not satisfied, contact us for a full refund.</p>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div>
+                <div class="footer-brand">🐾 ZOONETIX</div>
+                <div class="footer-tagline">AI-powered animal disease detection, built to help livestock owners catch problems early.</div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Navigate</h4>
+                <a href="/">Home</a>
+                <a href="/dashboard">Dashboard</a>
+                <a href="/services">Services</a>
+                <a href="/pricing">Pricing</a>
+            </div>
+
+            <div class="footer-col">
+                <h4>About</h4>
+                <a href="/creators">Our Team</a>
+                <a href="mailto:contact@zoonetix.com">Contact Us</a>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            &copy; 2026 ZOONETIX. All rights reserved.
+        </div>
+    </footer>
+
+    <script src="/static/js/theme.js?v=3" defer></script>
+    <script>
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            await fetch('/api/logout', { method: 'POST' });
+            window.location.href = '/';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ZOONETIX - Login & Signup</title>
+    <link rel="stylesheet" href="/static/css/styles.css?v=2" />
+    <link rel="stylesheet" href="/static/css/auth.css?v=1" />
+</head>
+<body>
+    <script>
+      if (localStorage.getItem('zoonetixTheme') === 'light') {
+        document.body.classList.add('theme-light');
+      }
+    </script>
+    <div class="particle-field" aria-hidden="true"></div>
+    
+    <div class="auth-container">
+        <div class="auth-card">
+            <!-- Header -->
+            <div class="auth-header">
+                <div class="header-top">
+                    <div class="logo">
+                        <span class="logo-icon">🐾</span>
+                        <span class="logo-text">ZOONETIX</span>
+                    </div>
+                    <button class="btn btn-secondary theme-toggle-btn" id="themeToggleBtn" type="button" aria-label="Toggle theme">☀️ Light</button>
+                </div>
+                <p class="tagline">AI-Powered Animal Disease Detection</p>
+            </div>
+
+            <!-- Form Toggle Buttons -->
+            <div class="form-toggle">
+                <button class="toggle-btn active" id="loginToggle" data-form="login">
+                    Login
+                </button>
+                <button class="toggle-btn" id="signupToggle" data-form="signup">
+                    Sign Up
+                </button>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" class="auth-form active" novalidate>
+                <div class="form-group">
+                    <label for="loginEmail">Email Address</label>
+                    <input
+                        type="email"
+                        id="loginEmail"
+                        name="email"
+                        placeholder="you@example.com"
+                        required
+                    />
+                    <span class="error-message" id="loginEmailError"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <div class="password-input">
+                        <input
+                            type="password"
+                            id="loginPassword"
+                            name="password"
+                            placeholder="Enter your password"
+                            required
+                        />
+                        <button type="button" class="toggle-password" data-target="loginPassword">
+                            👁️
+                        </button>
+                    </div>
+                    <span class="error-message" id="loginPasswordError"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full">
+                    <span class="btn-text">Login</span>
+                    <span class="btn-loader" id="loginLoader"></span>
+                </button>
+
+                <div class="form-message" id="loginMessage"></div>
+            </form>
+
+            <!-- Signup Form -->
+            <form id="signupForm" class="auth-form" novalidate>
+                <div class="form-group">
+                    <label for="signupEmail">Email Address</label>
+                    <input
+                        type="email"
+                        id="signupEmail"
+                        name="email"
+                        placeholder="you@example.com"
+                        required
+                    />
+                    <span class="error-message" id="signupEmailError"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="signupUsername">Username</label>
+                    <input
+                        type="text"
+                        id="signupUsername"
+                        name="username"
+                        placeholder="Choose a username"
+                        minlength="3"
+                        required
+                    />
+                    <span class="error-message" id="signupUsernameError"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <div class="password-input">
+                        <input
+                            type="password"
+                            id="signupPassword"
+                            name="password"
+                            placeholder="At least 6 characters"
+                            minlength="6"
+                            required
+                        />
+                        <button type="button" class="toggle-password" data-target="signupPassword">
+                            👁️
+                        </button>
+                    </div>
+                    <span class="error-message" id="signupPasswordError"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <div class="password-input">
+                        <input
+                            type="password"
+                            id="confirmPassword"
+                            name="confirm_password"
+                            placeholder="Re-enter your password"
+                            required
+                        />
+                        <button type="button" class="toggle-password" data-target="confirmPassword">
+                            👁️
+                        </button>
+                    </div>
+                    <span class="error-message" id="confirmPasswordError"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full">
+                    <span class="btn-text">Create Account</span>
+                    <span class="btn-loader" id="signupLoader"></span>
+                </button>
+
+                <div class="form-message" id="signupMessage"></div>
+
+                <div class="terms-text">
+                    By signing up, you agree to our Terms of Service and Privacy Policy
+                </div>
+            </form>
+
+            <!-- Footer -->
+            <div class="auth-footer">
+                <p class="footer-text">
+                    Keep your livestock healthy with ZOONETIX's AI-powered disease detection
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/auth.js?v=1" defer></script>
+    <script src="/static/js/theme.js?v=3" defer></script>
+</body>
+</html>

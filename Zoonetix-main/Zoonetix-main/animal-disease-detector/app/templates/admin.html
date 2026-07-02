@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZOONETIX - Admin Panel</title>
+<link rel="stylesheet" href="/static/css/styles.css">
+<style>
+  .admin-wrap {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+  }
+  .admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .admin-header h1 {
+    color: #14b8a6;
+    font-size: 1.6rem;
+  }
+  .admin-stats {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .stat-card {
+    background: #1a1f2b;
+    border: 1px solid #263041;
+    border-radius: 10px;
+    padding: 16px 20px;
+    min-width: 140px;
+  }
+  .stat-card .num {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #14b8a6;
+  }
+  .stat-card .label {
+    font-size: 0.85rem;
+    color: #9aa5b1;
+  }
+  table.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #1a1f2b;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .admin-table th, .admin-table td {
+    padding: 12px 14px;
+    text-align: left;
+    border-bottom: 1px solid #263041;
+    font-size: 0.9rem;
+    color: #e5e9f0;
+  }
+  .admin-table th {
+    background: #11151d;
+    color: #9aa5b1;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+  }
+  .admin-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+  .admin-badge.admin { background: rgba(20,184,166,0.15); color: #14b8a6; }
+  .admin-badge.user { background: rgba(148,163,184,0.15); color: #94a3b8; }
+  .admin-loading, .admin-error {
+    text-align: center;
+    padding: 40px;
+    color: #9aa5b1;
+  }
+  .action-btn {
+    border: none;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-right: 6px;
+    transition: opacity 0.15s ease;
+  }
+  .action-btn:hover { opacity: 0.85; }
+  .btn-view {
+    background: rgba(20,184,166,0.15);
+    color: #14b8a6;
+  }
+  .btn-delete {
+    background: rgba(239,68,68,0.15);
+    color: #ef4444;
+  }
+  .btn-delete:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  /* Modal for viewing a user's predictions */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-box {
+    background: #1a1f2b;
+    border: 1px solid #263041;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    padding: 24px;
+  }
+  .modal-box h2 {
+    color: #14b8a6;
+    font-size: 1.2rem;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .modal-close {
+    background: none;
+    border: none;
+    color: #9aa5b1;
+    font-size: 1.2rem;
+    cursor: pointer;
+  }
+  .pred-item {
+    background: #11151d;
+    border: 1px solid #263041;
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+    font-size: 0.85rem;
+    color: #e5e9f0;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .pred-item .pred-disease { font-weight: 600; color: #14b8a6; }
+  .pred-item .pred-meta { color: #9aa5b1; font-size: 0.78rem; }
+
+  @media (max-width: 700px) {
+    .admin-table { font-size: 0.78rem; }
+    .admin-table th, .admin-table td { padding: 8px; }
+    .action-btn { padding: 5px 8px; font-size: 0.72rem; }
+  }
+
+  /* Footer */
+  .site-footer {
+    border-top: 1px solid #263041;
+    background: #0d1119;
+    padding: 40px 20px 24px;
+    margin-top: 40px;
+  }
+  .footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+  .footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #14b8a6;
+    margin-bottom: 8px;
+  }
+  .footer-tagline {
+    color: #6b7686;
+    font-size: 0.85rem;
+    max-width: 280px;
+  }
+  .footer-col h4 {
+    color: #e5e9f0;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 12px;
+  }
+  .footer-col a {
+    display: block;
+    color: #9aa5b1;
+    text-decoration: none;
+    font-size: 0.88rem;
+    margin-bottom: 8px;
+  }
+  .footer-col a:hover { color: #14b8a6; }
+  .footer-bottom {
+    max-width: 1200px;
+    margin: 32px auto 0;
+    padding-top: 20px;
+    border-top: 1px solid #1c2330;
+    text-align: center;
+    color: #5b6472;
+    font-size: 0.8rem;
+  }
+
+  /* Temporary navbar — replace this whole <nav> block with your
+     real site navbar whenever you send it over, so styling matches
+     the rest of the pages exactly. */
+  .admin-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    background: #11151d;
+    border-bottom: 1px solid #263041;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .admin-nav .brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #14b8a6;
+  }
+  .admin-nav .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .admin-nav .nav-links a {
+    color: #e5e9f0;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  .admin-nav .nav-links a:hover {
+    color: #14b8a6;
+  }
+  .admin-nav .nav-links a.active {
+    color: #14b8a6;
+    font-weight: 700;
+  }
+  .admin-nav .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .admin-nav .logout-btn {
+    background: rgba(239,68,68,0.15);
+    color: #ef4444;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .admin-nav .logout-btn:hover { opacity: 0.85; }
+</style>
+</head>
+<body>
+
+  <!-- ============================================================
+       TEMPORARY navbar so the admin can move between pages.
+       Replace this whole <nav> block with your real site navbar
+       (copied from index.html) whenever you send it over.
+  ============================================================= -->
+  <nav class="admin-nav">
+    <div class="brand">🐾 ZOONETIX</div>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/dashboard">Dashboard</a>
+      <a href="/services">Services</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/creators">Creators</a>
+      <a href="/admin" class="active">Admin Panel</a>
+    </div>
+    <div class="nav-right">
+      <span>Welcome, {{ current_user }}</span>
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+  </nav>
+
+  <div class="admin-wrap">
+    <div class="admin-header">
+      <h1>🐾 Admin Panel</h1>
+      <span>Logged in as {{ current_user }}</span>
+    </div>
+
+    <div class="admin-stats" id="adminStats">
+      <div class="stat-card">
+        <div class="num" id="statTotalUsers">-</div>
+        <div class="label">Total Users</div>
+      </div>
+      <div class="stat-card">
+        <div class="num" id="statTotalAdmins">-</div>
+        <div class="label">Admins</div>
+      </div>
+      <div class="stat-card">
+        <div class="num" id="statTotalPredictions">-</div>
+        <div class="label">Total Predictions</div>
+      </div>
+    </div>
+
+    <div id="adminContent">
+      <div class="admin-loading">Loading users...</div>
+    </div>
+  </div>
+
+  <!-- Predictions modal -->
+  <div class="modal-overlay" id="predModal">
+    <div class="modal-box">
+      <h2>
+        <span id="predModalTitle">Predictions</span>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </h2>
+      <div id="predModalBody">
+        <div class="admin-loading">Loading...</div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">🐾 ZOONETIX</div>
+        <div class="footer-tagline">AI-powered animal disease detection, built to help livestock owners catch problems early.</div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Navigate</h4>
+        <a href="/">Home</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/services">Services</a>
+        <a href="/pricing">Pricing</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>About</h4>
+        <a href="/creators">Our Team</a>
+        <a href="mailto:contact@zoonetix.com">Contact Us</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      &copy; 2026 ZOONETIX. All rights reserved.
+    </div>
+  </footer>
+
+  <script>
+    const CURRENT_USERNAME = "{{ current_user }}";
+
+    async function loadUsers() {
+      const contentEl = document.getElementById('adminContent');
+      try {
+        const res = await fetch('/api/admin/users');
+
+        if (res.status === 403) {
+          contentEl.innerHTML = '<div class="admin-error">You do not have permission to view this page.</div>';
+          return;
+        }
+        if (res.status === 401) {
+          window.location.href = '/';
+          return;
+        }
+        if (!res.ok) throw new Error('Failed to load users');
+
+        const users = await res.json();
+
+        document.getElementById('statTotalUsers').textContent = users.length;
+        document.getElementById('statTotalAdmins').textContent =
+          users.filter(u => u.is_admin).length;
+        document.getElementById('statTotalPredictions').textContent =
+          users.reduce((sum, u) => sum + (u.prediction_count || 0), 0);
+
+        if (users.length === 0) {
+          contentEl.innerHTML = '<div class="admin-loading">No users found.</div>';
+          return;
+        }
+
+        const rows = users.map(u => `
+          <tr id="user-row-${u.id}">
+            <td>${u.id}</td>
+            <td>${escapeHtml(u.username)}</td>
+            <td>${escapeHtml(u.email)}</td>
+            <td><span class="admin-badge ${u.is_admin ? 'admin' : 'user'}">${u.is_admin ? 'Admin' : 'User'}</span></td>
+            <td>${u.prediction_count}</td>
+            <td>${u.created_at ? new Date(u.created_at).toLocaleDateString() : '-'}</td>
+            <td>
+              <button class="action-btn btn-view" onclick="viewPredictions(${u.id}, '${escapeJs(u.username)}')">View</button>
+              <button class="action-btn btn-delete"
+                onclick="deleteUser(${u.id}, '${escapeJs(u.username)}')"
+                ${u.username === CURRENT_USERNAME ? 'disabled title="You cannot delete your own account"' : ''}>
+                Delete
+              </button>
+            </td>
+          </tr>
+        `).join('');
+
+        contentEl.innerHTML = `
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Predictions</th>
+                <th>Joined</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        `;
+      } catch (err) {
+        contentEl.innerHTML = '<div class="admin-error">Something went wrong loading the admin data.</div>';
+        console.error(err);
+      }
+    }
+
+    async function deleteUser(userId, username) {
+      const confirmed = confirm(`Delete user "${username}"? This will also delete all of their predictions. This cannot be undone.`);
+      if (!confirmed) return;
+
+      try {
+        const res = await fetch(`/api/admin/users/${userId}`, { method: 'DELETE' });
+
+        if (res.status === 400) {
+          const data = await res.json();
+          alert(data.detail || "Can't delete this user.");
+          return;
+        }
+        if (res.status === 403) {
+          alert("You don't have permission to do that.");
+          return;
+        }
+        if (!res.ok) throw new Error('Delete failed');
+
+        // Remove row instantly, then reload stats
+        const row = document.getElementById(`user-row-${userId}`);
+        if (row) row.remove();
+        loadUsers();
+      } catch (err) {
+        alert('Something went wrong deleting this user.');
+        console.error(err);
+      }
+    }
+
+    async function viewPredictions(userId, username) {
+      const modal = document.getElementById('predModal');
+      const body = document.getElementById('predModalBody');
+      const title = document.getElementById('predModalTitle');
+
+      title.textContent = `${username}'s Predictions`;
+      body.innerHTML = '<div class="admin-loading">Loading...</div>';
+      modal.classList.add('open');
+
+      try {
+        const res = await fetch(`/api/admin/users/${userId}/predictions`);
+        if (!res.ok) throw new Error('Failed to load predictions');
+
+        const data = await res.json();
+        const predictions = data.predictions || [];
+
+        if (predictions.length === 0) {
+          body.innerHTML = '<div class="admin-loading">No predictions yet.</div>';
+          return;
+        }
+
+        body.innerHTML = predictions.map(p => `
+          <div class="pred-item">
+            <div>
+              <div class="pred-disease">${escapeHtml(p.disease)}</div>
+              <div class="pred-meta">${p.image_name ? escapeHtml(p.image_name) : 'No filename'}</div>
+            </div>
+            <div class="pred-meta">
+              ${(p.confidence * 100).toFixed(1)}% confidence<br>
+              ${p.created_at ? new Date(p.created_at).toLocaleString() : ''}
+            </div>
+          </div>
+        `).join('');
+      } catch (err) {
+        body.innerHTML = '<div class="admin-error">Could not load predictions.</div>';
+        console.error(err);
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('predModal').classList.remove('open');
+    }
+
+    document.getElementById('predModal').addEventListener('click', (e) => {
+      if (e.target.id === 'predModal') closeModal();
+    });
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+    function escapeJs(str) {
+      return String(str).replace(/'/g, "\\'");
+    }
+
+    async function logout() {
+      try {
+        await fetch('/api/logout', { method: 'POST' });
+      } catch (err) {
+        console.error(err);
+      }
+      window.location.href = '/';
+    }
+
+    loadUsers();
+  </script>
+
+</body>
+</html>
